@@ -1,0 +1,85 @@
+TASCREC<-read.table("clipboard", header = T, dec = ',')
+View(pib)
+pibts <- ts(TASCREC[,2], start = 1961, end=2014)
+plot (pibts, main= "tasa de crecimiento", xlab="año", ylab="porcentaje del PIB", col=6)
+View(pibts)
+
+###Analisis de residuaos 
+### require (fpp)
+####residuals = residuales (se analizan los residuos para ver la variabilidad)
+### se tienen que distribuir normalmente 
+### var constante
+###no exista correlación entre los errores
+#### código 
+require(fpp)
+plot(pibts, main="crecimiento económico anual", ylab="porcentaje del PIB", xlab="año")
+res2<- residuals(snaive(pibts))
+res3<- residuals(rwf(pibts, drift = T))
+res4<-residuals(meanf(pibts))
+res5<-naive(pibts,2)
+
+
+plot(res2, main="residual de ingenuo estacional", ylab= "residuales", xlab="años")#### para saber si la varianza es constante 
+### la varienza no es constante ya que la figura se notan muchas variaciones 
+
+Acf(res2, main="Acf residuales")#### para saber si hay o no hay correlación entre los errores
+### no hay correlación entre los errores ya que solo uno se sale del límite
+
+hist(res2, main="histograma residuales")#### para conocer si los residuos se distribuyen normalmente 
+#### muestra un comportamiento normal 
+
+
+
+plot(res3, main="residual de ingenuo estacional", ylab= "residuales", xlab="años")#### para saber si la varianza es constante 
+### la varienza no es constante ya que la figura se notan muchas variaciones 
+
+Acf(res3, main="Acf residuales")#### para saber si hay o no hay correlación entre los errores
+### no hay correlación entre los errores ya que solo uno se sale del límite
+
+hist(res3, main="histograma residuales")#### para conocer si los residuos se distribuyen normalmente 
+#### muestra un comportamiento normal 
+
+
+
+plot(res4, main="residual de ingenuo estacional", ylab= "residuales", xlab="años")#### para saber si la varianza es constante 
+### la varienza no es constante ya que la figura se notan muchas variaciones 
+
+Acf(res4, main="Acf residuales")#### para saber si hay o no hay correlación entre los errores
+### no hay correlación entre los errores ya que solo uno se sale del límite
+
+hist(res4, main="histograma residuales")#### para conocer si los residuos se distribuyen normalmente 
+#### muestra un comportamiento normal 
+
+
+plot(res5, main="residual de ingenuo estacional", ylab= "residuales", xlab="años")#### para saber si la varianza es constante 
+### la varienza no es constante ya que la figura se notan muchas variaciones 
+
+Acf(res5, main="Acf residuales")#### para saber si hay o no hay correlación entre los errores
+### no hay correlación entre los errores ya que solo uno se sale del límite
+
+hist(res2, main="histograma residuales")#### para conocer si los residuos se distribuyen normalmente 
+#### muestra un comportamiento normal 
+##### si la serie no es estacional se usa 10 y si la hay hay que poner cdonde esta elperiodo de etacionalidad 
+
+
+
+
+###lag momentos que estamos pronosticando 
+####fitdf parametros que tiene nuestra serie de tiempo, numero de gradoa de libertad que son extraidos de nuestra serie de residuales 
+#### hipotesis nula: las autocorrelaciones de hasta un desfase k son iguales a cero (aleatorio independientes)
+#### hipotesos alternativa lAS AUTOCORRELACIONES SON DIFERENTES SIGNIFICATIVAMENTE DE CERO (NO HAY ALEATORIEDAD NI INDEPENDENCIA)
+###P-VALUE> .05 SE ACEPTA LA HIPOTESIS NULA DE ALEATORIEDAD E INDEPENDENCIA
+
+
+
+Box.test(res2, lag=10, fitdf=0)####box- pierce
+Box.test(res2,lag = 10, fitdf = 0, type = "Lj")#### box ljun
+
+Box.test(res3, lag=10, fitdf=0)####box- pierce
+Box.test(res3,lag = 10, fitdf = 0, type = "Lj")#### box ljun
+
+Box.test(res4, lag=10, fitdf=0)####box- pierce
+Box.test(res4,lag = 10, fitdf = 0, type = "Lj")#### box ljun
+
+Box.test(res5, lag=10, fitdf=0)####box- pierce
+Box.test(res5,lag = 10, fitdf = 0, type = "Lj")#### box ljun
